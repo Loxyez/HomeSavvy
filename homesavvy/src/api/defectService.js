@@ -4,7 +4,7 @@ import config from '../utils/config';
 // Get all defects with default null handling
 export const getDefects = async () => {
     try {
-        const response = await axios.get(`${config.apiBaseUrl}/defects`);
+        const response = await axios.get(`https://home-savvy-lambda.vercel.app/defects`);
         const defects = response.data.map((defect) => {
             defect.place = defect.place || 'Unknown Place';   // Default if null/undefined
             defect.detail = defect.detail || 'No details provided';  // Default if null/undefined
@@ -23,7 +23,7 @@ export const getDefects = async () => {
 // Add a new defect
 export const addDefect = async (defect) => {
     try {
-        const response = await axios.post(`${config.apiBaseUrl}/defects`, defect, {
+        const response = await axios.post(`https://home-savvy-lambda.vercel.app/defects`, defect, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
         return response.data;
