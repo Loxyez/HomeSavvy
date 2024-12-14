@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import AddDefect from "./pages/AddDefect";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/add-defect" element={<AddDefect />} />
         </Routes>
       </Box>
     </Router>
