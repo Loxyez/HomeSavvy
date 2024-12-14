@@ -1,5 +1,5 @@
 const config = {
-    apiBaseUrl: process.env.API_LAMBDA_URL || 'http://localhost:5000',
+    apiBaseUrl: process.env.API_LAMBDA_URL,
 };
 
 export default config;
