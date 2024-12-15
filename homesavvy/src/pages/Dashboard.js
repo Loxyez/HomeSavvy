@@ -64,7 +64,6 @@ function Dashboard() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Order</TableCell>
               <TableCell>Place</TableCell>
               <TableCell>Details</TableCell>
               <TableCell>Status</TableCell>
@@ -75,7 +74,6 @@ function Dashboard() {
           <TableBody>
             {defects.map((defect) => (
               <TableRow key={defect.defect_id}>
-                <TableCell>{defect.defect_id}</TableCell>
                 <TableCell>{defect.place}</TableCell>
                 <TableCell>{defect.detail}</TableCell>
                 <TableCell>{defect.status}</TableCell>
