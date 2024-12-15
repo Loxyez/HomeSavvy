@@ -36,7 +36,19 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(true);
   const [filter, setFilter] = useState('');
+  const [progressFilter, setProgressFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
+
+  const progressMapping = {
+    'Not Started': 'รอดำเนินการ',
+    'In Progress': 'กำลังดำเนินการ',
+    'Completed': 'เสร็จสิ้น',
+  };
+  
+  const statusMapping = {
+    'Pending': 'รอดำเนินการ',
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,9 +68,19 @@ function Dashboard() {
     setFilter(event.target.value); // Update filter when user selects a value
   };
 
-  const filteredDefects = filter
-    ? defects.filter((defect) => defect.place.includes(filter)) // Filter by place (you can adjust the condition as needed)
-    : defects;
+  const handleProgressFilterChange = (event) => {
+    setProgressFilter(event.target.value); // Update filter when user selects a value
+  };
+
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value); // Update filter when user selects a value
+  };
+
+  const filteredDefects = defects.filter((defect) => 
+    (!filter || defect.place.includes(filter)) && 
+    (!progressFilter || defect.progress.includes(progressFilter)) &&
+    (!statusFilter || defect.status.includes(statusFilter))
+  );
 
   const handleImageLoad = () => {
     setImageLoading(false); // Set loading to false when image is loaded
@@ -112,22 +134,56 @@ function Dashboard() {
   };
 
   const uniquePlaces = [...new Set(defects.map(defect => defect.place))].sort();
+  const uniqueProgress = [...new Set(defects.map(defect => defect.progress))].sort();
+  const uniqueStatus = [...new Set(defects.map(defect => defect.status))].sort();
 
   return (
     <Box sx={{ flexGrow: 1, mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
-        รายการ Defect ของบ้าน 1088/45
+        รายการ Defect ของบ้าน 1088/45 รอบแรก
       </Typography>
 
 
       {/* Filter Section */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <FormControl sx={{ minWidth: 150 }}>
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          gap: 2, // Adds spacing between filters
+          mb: 3 // Bottom margin
+        }}
+      >
+        <FormControl sx={{ minWidth: 200 }}>
           <InputLabel>สถานที่</InputLabel>
           <Select value={filter} onChange={handleFilterChange} label="เลือกสถานที่">
             <MenuItem value="">ทั้งหมด</MenuItem>
             {uniquePlaces.map((place) => (
               <MenuItem key={place} value={place}>{place}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel>ความคืบหน้า</InputLabel>
+          <Select value={progressFilter} onChange={handleProgressFilterChange} label="เลือกความคืบหน้า">
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {uniqueProgress.map((progress) => (
+              <MenuItem key={progress} value={progress}>
+                {progressMapping[progress] || progress}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel>สถานะ</InputLabel>
+          <Select value={statusFilter} onChange={handleStatusFilterChange} label="เลือกสถานะ">
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {uniqueStatus.map((status) => (
+              <MenuItem key={status} value={status}>
+                {statusMapping[status] || status}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
