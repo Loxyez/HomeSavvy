@@ -21,11 +21,22 @@ export const getDefects = async () => {
 };
 
 // Add a new defect
-export const addDefect = async (defect) => {
+export const addDefect = async (formData) => {
+    console.log('Adding defect:', formData);
     try {
-        const response = await axios.post(`https://home-savvy-lambda.vercel.app/defects`, defect, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        const response = await axios.post('https://home-savvy-lambda.vercel.app/defects', formData);
+
+        const { defect, uploadUrl } = response.data;
+
+        if (formData.photo) {
+            const uploadResponse = await axios.post(uploadUrl, formData.photo, {
+                headers: {
+                    'Content-Type': formData.photo.type
+                }
+            });
+            console.log('Upload response:', uploadResponse);
+        }
+
         return response.data;
     } catch (error) {
         console.error('Error while adding defect:', error);

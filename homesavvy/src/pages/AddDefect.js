@@ -21,27 +21,30 @@ const AddDefect = () => {
 
   // Handle file input
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevState) => ({ ...prevState, photo: file }));
-  };
+    console.log('File Selected:', e.target.files[0]); // Log the file
+    setFormData({ ...formData, photo: e.target.files[0] });
+  };  
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Clear errors
 
-    console.log('Form Data:', formData);
-
     try {
-      const formDataToSend = new FormData(); // Create FormData object
+      const formDataToSend = new FormData();
       formDataToSend.append('place', formData.place);
       formDataToSend.append('detail', formData.detail);
 
-      // Append file if selected
       if (formData.photo) {
         formDataToSend.append('picture', formData.photo);
       }
 
+      // Log FormData
+      for (var pair of formDataToSend.entries()) {
+          console.log(pair[0]+ ', ' + pair[1]); 
+      }
+
+      // get return from await addDefect(formDataToSend)
       await addDefect(formDataToSend);
       navigate('/dashboard'); // Redirect after successful submission
     } catch (err) {
