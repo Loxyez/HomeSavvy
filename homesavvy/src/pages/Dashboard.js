@@ -21,7 +21,9 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Tooltip,
+  Chip
 } from "@mui/material";
 import { Visibility as VisibilityIcon, Edit as EditIcon } from '@mui/icons-material';
 import UpdateStatusDialog from './UpdateStatusDialog';
@@ -119,15 +121,17 @@ function Dashboard() {
 
 
       {/* Filter Section */}
-      <FormControl fullWidth margin="normal">
-        <InputLabel>เลือกสถานที่</InputLabel>
-        <Select value={filter} onChange={handleFilterChange} label="เลือกสถานที่">
-          <MenuItem value="">ทั้งหมด</MenuItem> {/* Option to show all defects */}
-          {uniquePlaces.map((place) => (
-            <MenuItem key={place} value={place}>{place}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <FormControl sx={{ minWidth: 150 }}>
+          <InputLabel>สถานที่</InputLabel>
+          <Select value={filter} onChange={handleFilterChange} label="เลือกสถานที่">
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {uniquePlaces.map((place) => (
+              <MenuItem key={place} value={place}>{place}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
         <Button variant="contained" onClick={() => navigate('/add-defect')}>
@@ -149,7 +153,7 @@ function Dashboard() {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow sx={{ backgroundColor: "#f4f4f4"}}>
                 <TableCell>สถานที่</TableCell>
                 <TableCell>รายละเอียด</TableCell>
                 <TableCell>ดูรูปภาพ / อัพเดตสถานะ</TableCell>
@@ -159,9 +163,21 @@ function Dashboard() {
             </TableHead>
             <TableBody>
               {filteredDefects.map((defect) => (
-                <TableRow key={defect.defect_id}>
+                <TableRow key={defect.defect_id}
+                  sx={{
+                    '&:nth-of-type(odd)': { backgroundColor: '#fafafa' },
+                    '&:hover': { backgroundColor: '#e0f7fa' },
+                    cursor: 'pointer'
+                  }}
+                >
                   <TableCell>{defect.place}</TableCell>
-                  <TableCell style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{defect.detail}</TableCell>
+                  <TableCell>
+                    <Tooltip title={defect.detail}>
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '200px' }}>
+                        {defect.detail}
+                      </span>
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>
                     {/* Button to show pictures in a dialog */}
                     {defect.pictures && defect.pictures.length > 0 && (
@@ -173,11 +189,18 @@ function Dashboard() {
                       </IconButton>
                     )}
                     {' '}
-                    <Button variant="outlined" onClick={() => handleOpenDialogEdit(defect)}>
-                      อัพเดทสถานะ
-                    </Button>
                   </TableCell>
-                  <TableCell>{defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}
+                      color={defect.status === "Pending" ? "warning" : "success"}
+                      variant="outlined"
+                      size="small"
+                    />
+                    <IconButton color="primary" onClick={() => handleOpenDialogEdit(defect)}>
+                      <EditIcon />
+                    </IconButton>
+                  </TableCell>
                   <TableCell>{defect.progress === "Not Started" ? "รอดำเนินการ" : defect.progress}</TableCell>
                 </TableRow>
               ))}
@@ -203,8 +226,6 @@ function Dashboard() {
             <>
               <Typography variant="h6">สถานที: {selectedDefect.place}</Typography>
               <Typography variant="body1">รายละเอียด: {selectedDefect.detail}</Typography>
-              <Typography variant="body2">สถานะ: {selectedDefect.status === "Pending" ? "รอทำการแก้ไข" : selectedDefect.status}</Typography>
-              <Typography variant="body2">ความคืบหน้า: {selectedDefect.progress === "Not Started" ? "รอดำเนินการ" : selectedDefect.progress}</Typography>
 
               <Box sx={{ mt: 2 }}>
                 {imageLoading && (
