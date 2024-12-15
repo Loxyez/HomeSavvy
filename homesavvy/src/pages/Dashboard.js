@@ -119,9 +119,9 @@ function Dashboard() {
               <TableRow>
                 <TableCell>สถานที่</TableCell>
                 <TableCell>รายละเอียด</TableCell>
+                <TableCell>ดูรูปภาพ / อัพเดตสถานะ</TableCell>
                 <TableCell>สถานะ</TableCell>
                 <TableCell>ความคืบหน้า</TableCell>
-                <TableCell>ดูรูปภาพ / อัพเดตสถานะ</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -129,8 +129,6 @@ function Dashboard() {
                 <TableRow key={defect.defect_id}>
                   <TableCell>{defect.place}</TableCell>
                   <TableCell style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{defect.detail}</TableCell>
-                  <TableCell>{defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}</TableCell>
-                  <TableCell>{defect.progress === "Not Started" ? "รอดำเนินการ" : defect.progress}</TableCell>
                   <TableCell>
                     {/* Button to show pictures in a dialog */}
                     {defect.pictures && defect.pictures.length > 0 && (
@@ -146,6 +144,8 @@ function Dashboard() {
                       อัพเดทสถานะ
                     </Button>
                   </TableCell>
+                  <TableCell>{defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}</TableCell>
+                  <TableCell>{defect.progress === "Not Started" ? "รอดำเนินการ" : defect.progress}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
