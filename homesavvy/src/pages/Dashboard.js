@@ -116,7 +116,7 @@ function Dashboard() {
                 {selectedDefect.pictures.map((picture, index) => (
                   <img
                     key={index}
-                    src={`${config.apiBaseUrl}${picture}`}
+                    src={`${picture}`}
                     alt={`Defect ${selectedDefect.defect_id} Image ${index + 1}`}
                     style={{ width: '100%', height: 'auto', marginBottom: '10px' }}
                   />

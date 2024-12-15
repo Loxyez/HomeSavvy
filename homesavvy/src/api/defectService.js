@@ -25,6 +25,7 @@ export const addDefect = async (formData) => {
     console.log('Adding defect:', formData);
     try {
         const response = await axios.post('https://home-savvy-lambda.vercel.app/defects', formData);
+        console.log('Defect added:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error while adding defect:', error);
