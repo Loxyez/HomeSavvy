@@ -172,11 +172,16 @@ function Dashboard() {
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center',
-          gap: 2, // Adds spacing between filters
-          mb: 3 // Bottom margin
+          flexWrap: 'wrap', // Wrap filters on small screens
+          gap: 2, 
+          mb: 3,
+          backgroundColor: '#f9f9f9',
+          padding: 2,
+          borderRadius: 2,
+          boxShadow: 1
         }}
       >
-        <FormControl sx={{ minWidth: 200 }}>
+        <FormControl sx={{ minWidth: { xs: 150, sm: 200 } }}>
           <InputLabel>สถานที่</InputLabel>
           <Select value={filter} onChange={handleFilterChange} label="เลือกสถานที่">
             <MenuItem value="">ทั้งหมด</MenuItem>
@@ -186,7 +191,7 @@ function Dashboard() {
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 200 }}>
+        <FormControl sx={{ minWidth: { xs: 150, sm: 200 } }}>
           <InputLabel>ความคืบหน้า</InputLabel>
           <Select value={progressFilter} onChange={handleProgressFilterChange} label="เลือกความคืบหน้า">
             <MenuItem value="">ทั้งหมด</MenuItem>
@@ -198,7 +203,7 @@ function Dashboard() {
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 200 }}>
+        <FormControl sx={{ minWidth: { xs: 150, sm: 200 } }}>
           <InputLabel>สถานะ</InputLabel>
           <Select value={statusFilter} onChange={handleStatusFilterChange} label="เลือกสถานะ">
             <MenuItem value="">ทั้งหมด</MenuItem>
