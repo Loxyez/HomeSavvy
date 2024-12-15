@@ -50,6 +50,28 @@ function Dashboard() {
     'Pending': 'รอดำเนินการ',
   };
 
+  // Define mappings for status and progress
+  const statusColorMapping = {
+    "Pending": { label: "รอทำการแก้ไข", color: "warning" },
+    "กำลังดำเนินการแก้ไข": { label: "กำลังดำเนินการแก้ไข", color: "primary" },
+    "ไม่สามารถแก้ไขได้": { label: "ไม่สามารถแก้ไขได้", color: "error" },
+    "แก้ไขเรียบร้อย": { label: "แก้ไขเรียบร้อย", color: "success" },
+    "การดำเนินการล่าช้า": { label: "การดำเนินการล่าช้า", color: "error" },
+    "รอวัสดุ": { label: "รอวัสดุ", color: "warning" },
+    "ระงับชั่วคราว": { label: "ระงับชั่วคราว", color: "default" },
+  };
+
+  const progressColorMapping = {
+    "Not Started": { label: "รอดำเนินการ", color: "warning" },
+    "กำลังดำเนินการเก็บรายระเอียด": { label: "กำลังดำเนินการเก็บรายระเอียด", color: "primary" },
+    "รอของสำหรับติดตั้ง": { label: "รอของสำหรับติดตั้ง", color: "warning" },
+    "พร้อมติดตั้ง": { label: "พร้อมติดตั้ง", color: "primary" },
+    "การติดตั้งเสร็จสิ้น": { label: "การติดตั้งเสร็จสิ้น", color: "success" },
+    "พร้อมส่งมอบ": { label: "พร้อมส่งมอบ", color: "success" },
+    "เสร็จสมบูรณ์": { label: "เสร็จสมบูรณ์", color: "success" },
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -248,8 +270,8 @@ function Dashboard() {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}
-                      color={defect.status === "Pending" ? "warning" : "success"}
+                      label={statusColorMapping[defect.status]?.label || defect.status}
+                      color={statusColorMapping[defect.status]?.color || "default"}
                       variant="outlined"
                       size="small"
                     />
@@ -257,7 +279,14 @@ function Dashboard() {
                       <EditIcon />
                     </IconButton>
                   </TableCell>
-                  <TableCell>{defect.progress === "Not Started" ? "รอดำเนินการ" : defect.progress}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={progressColorMapping[defect.progress]?.label || defect.progress}
+                      color={progressColorMapping[defect.progress]?.color || "default"}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
