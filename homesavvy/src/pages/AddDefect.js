@@ -123,7 +123,7 @@ const AddDefect = () => {
             color="secondary"
             sx={{ mt: 2 }}
             fullWidth
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/dashboard')}
           >
             ยกเลิก
           </Button>

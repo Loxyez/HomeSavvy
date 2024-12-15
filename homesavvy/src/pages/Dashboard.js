@@ -23,12 +23,12 @@ import { Visibility as VisibilityIcon, Edit as EditIcon } from '@mui/icons-mater
 import UpdateStatusDialog from './UpdateStatusDialog';
 
 function Dashboard() {
-
   const [defects, setDefects] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogEdit, setOpenDialogEdit] = React.useState(false);
   const [selectedDefect, setSelectedDefect] = React.useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +45,10 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  const handleImageLoad = () => {
+    setImageLoading(false); // Set loading to false when image is loaded
+  };
+
   const fetchData = async () => {
     try {
       const defects = await getDefects();
@@ -57,17 +61,19 @@ function Dashboard() {
   const handleViewDefect = (defect) => {
     setSelectedDefect(defect);
     setOpenDialog(true);
+    setImageLoading(true);  // Set imageLoading to true when dialog is opened
   };
 
   const handleOpenDialog = (defect) => {
     setSelectedDefect(defect);
     setOpenDialog(true);
+    setImageLoading(true);  // Reset the image loading state for each dialog open
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedDefect(null);
-  }
+  };
 
   const handleOpenDialogEdit = (defect) => {
     setSelectedDefect(defect);
@@ -77,7 +83,7 @@ function Dashboard() {
   const handleCloseDialogEdit = () => {
     setOpenDialogEdit(false);
     setSelectedDefect(null);
-  }
+  };
 
   const handleUpdate = async (updatedData) => {
     try {
@@ -100,7 +106,7 @@ function Dashboard() {
           Add Defect
         </Button>
       </div>
-      
+
       {/* Show loading spinner while fetching defects */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
@@ -122,7 +128,7 @@ function Dashboard() {
               {defects.map((defect) => (
                 <TableRow key={defect.defect_id}>
                   <TableCell>{defect.place}</TableCell>
-                  <TableCell>{defect.detail}</TableCell>
+                  <TableCell style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{defect.detail}</TableCell>
                   <TableCell>{defect.status === "Pending" ? "รอทำการแก้ไข" : defect.status}</TableCell>
                   <TableCell>{defect.progress === "Not Started" ? "รอดำเนินการ" : defect.progress}</TableCell>
                   <TableCell>
@@ -168,12 +174,19 @@ function Dashboard() {
               <Typography variant="body2">ความคืบหน้า: {selectedDefect.progress === "Not Started" ? "รอดำเนินการ" : selectedDefect.progress}</Typography>
 
               <Box sx={{ mt: 2 }}>
+                {imageLoading && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                  </Box>
+                )}
+
                 {selectedDefect.pictures.map((picture, index) => (
                   <img
                     key={index}
                     src={`${picture}`}
                     alt={`Defect ${selectedDefect.defect_id} Image ${index + 1}`}
                     style={{ width: '100%', height: 'auto', marginBottom: '10px' }}
+                    onLoad={handleImageLoad} // Trigger the loading state change once image is loaded
                   />
                 ))}
               </Box>
