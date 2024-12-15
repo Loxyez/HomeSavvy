@@ -17,7 +17,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { Visibility as VisibilityIcon, Edit as EditIcon } from '@mui/icons-material';
 import UpdateStatusDialog from './UpdateStatusDialog';
@@ -29,6 +33,7 @@ function Dashboard() {
   const [selectedDefect, setSelectedDefect] = React.useState(null);
   const [loading, setLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(true);
+  const [filter, setFilter] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +49,14 @@ function Dashboard() {
     };
     fetchData();
   }, []);
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value); // Update filter when user selects a value
+  };
+
+  const filteredDefects = filter
+    ? defects.filter((defect) => defect.place.includes(filter)) // Filter by place (you can adjust the condition as needed)
+    : defects;
 
   const handleImageLoad = () => {
     setImageLoading(false); // Set loading to false when image is loaded
@@ -96,16 +109,36 @@ function Dashboard() {
     }
   };
 
+  const uniquePlaces = [...new Set(defects.map(defect => defect.place))].sort();
+
   return (
     <Box sx={{ flexGrow: 1, mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
         รายการ Defect ของบ้าน 1088/45
       </Typography>
+
+
+      {/* Filter Section */}
+      <FormControl fullWidth margin="normal">
+        <InputLabel>เลือกสถานที่</InputLabel>
+        <Select value={filter} onChange={handleFilterChange} label="เลือกสถานที่">
+          <MenuItem value="">ทั้งหมด</MenuItem> {/* Option to show all defects */}
+          {uniquePlaces.map((place) => (
+            <MenuItem key={place} value={place}>{place}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
         <Button variant="contained" onClick={() => navigate('/add-defect')}>
           Add Defect
         </Button>
       </div>
+      
+      {/* show note that table can scroll left right */}
+      <Typography variant="body2" align="center" gutterBottom>
+        หมายเหตุ: สามารถเลื่อนตารางซ้ายขวาได้
+      </Typography>
 
       {/* Show loading spinner while fetching defects */}
       {loading ? (
@@ -125,7 +158,7 @@ function Dashboard() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {defects.map((defect) => (
+              {filteredDefects.map((defect) => (
                 <TableRow key={defect.defect_id}>
                   <TableCell>{defect.place}</TableCell>
                   <TableCell style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{defect.detail}</TableCell>
