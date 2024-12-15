@@ -32,3 +32,16 @@ export const addDefect = async (formData) => {
         throw error;
     }
 };
+
+// Update defect by defect_id
+export const updateDefect = async (defectId, updatedData) => {
+    console.log('Updating defect:', updatedData);
+    try {
+        const response = await axios.put(`https://home-savvy-lambda.vercel.app/defects/${defectId}`, updatedData);
+        console.log('Defect updated:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error while updating defect:', error);
+        throw error;
+    }
+};

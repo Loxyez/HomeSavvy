@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addDefect } from '../api/defectService';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, CircularProgress } from '@mui/material';
 
 const AddDefect = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const AddDefect = () => {
   });
 
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Handle input changes
@@ -29,6 +30,7 @@ const AddDefect = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Clear errors
+    setLoading(true);
 
     try {
       const formDataToSend = new FormData();
@@ -46,10 +48,12 @@ const AddDefect = () => {
 
       // get return from await addDefect(formDataToSend)
       await addDefect(formDataToSend);
+      setLoading(false);
       navigate('/dashboard'); // Redirect after successful submission
     } catch (err) {
       console.error('Failed to add defect:', err);
       setError('Failed to add defect. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -57,7 +61,7 @@ const AddDefect = () => {
     <Container maxWidth="sm">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Add New Defect
+          เพิมรายการ Defect ใหม่
         </Typography>
 
         {/* Display Error */}
@@ -70,7 +74,7 @@ const AddDefect = () => {
         {/* Add Defect Form */}
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <TextField
-            label="Place"
+            label="สถานที่"
             name="place"
             value={formData.place}
             onChange={handleChange}
@@ -80,7 +84,7 @@ const AddDefect = () => {
           />
 
           <TextField
-            label="Detail"
+            label="รายระเอียด"
             name="detail"
             value={formData.detail}
             onChange={handleChange}
@@ -105,8 +109,13 @@ const AddDefect = () => {
             color="primary"
             sx={{ mt: 2 }}
             fullWidth
+            disabled={loading} // Disable button while loading
           >
-            Submit
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: 'white' }} />
+            ) : (
+              'บันทึกข้อมูล'
+            )}
           </Button>
 
           <Button
@@ -116,7 +125,7 @@ const AddDefect = () => {
             fullWidth
             onClick={() => navigate('/')}
           >
-            Cancel
+            ยกเลิก
           </Button>
         </form>
       </Box>

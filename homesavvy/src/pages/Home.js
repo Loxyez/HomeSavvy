@@ -4,10 +4,19 @@ import {
     Box,
     Grid,
     Card,
-    CardContent
+    CardContent,
+    Button,
 } from "@mui/material";
+import {
+    CheckCircle,
+} from '@mui/icons-material';
+
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+
+    const navigate = useNavigate();
+
     return (
         <Box sx={{ flexGrow: 1, mt: 4 }}>
             <Typography variant="h4" align="center" gutterBottom>
@@ -17,32 +26,20 @@ export default function Home() {
                 <Grid item xs={12} sm={6} md={4}>
                     <Card>
                         <CardContent>
-                        <Typography variant="h6">Manage Defects</Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Easily manage and update your house defect reports.
-                            </Typography>
+                        <Typography variant="h6">AP-Pleno Fashio-Ramintha 1088/45</Typography>
+                            <Button
+                                onClick={() => {
+                                    navigate('/dashboard');
+                                }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ mt: 2, width: '100%' }}
+                                startIcon={<CheckCircle />}
+                            >
+                                ไปทีหน้าตรวจสอบสถานะ
+                            </Button>
                         </CardContent>
                     </Card>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card>
-                        <CardContent>
-                        <Typography variant="h6">Upload Images</Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Upload images of defects for better tracking.
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                <Card>
-                    <CardContent>
-                    <Typography variant="h6">Real-time Updates</Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            Track the progress of your reported issues.
-                        </Typography>
-                    </CardContent>
-                </Card>
                 </Grid>
             </Grid>
         </Box>

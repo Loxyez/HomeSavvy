@@ -23,8 +23,8 @@ function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             HomeSavvy D.T.A
           </Typography>
-          <Button color="inherit" href="/">Home</Button>
-          <Button color="inherit" href="/dashboard">Dashboard</Button>
+          <Button color="inherit" href="/">หน้าหลัก</Button>
+          <Button color="inherit" href="/dashboard">กระดานรายละเอียด</Button>
         </Toolbar>
       </AppBar>
 
