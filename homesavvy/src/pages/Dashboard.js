@@ -38,7 +38,24 @@ function Dashboard() {
   const [filter, setFilter] = useState('');
   const [progressFilter, setProgressFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [localDefects, setLocalDefects] = useState(defects);
   const navigate = useNavigate();
+
+  const handleAction = (action, data) => {
+    const currentScrollPosition = window.scrollY;
+  
+    if (action === 'update') {
+      setLocalDefects((prevDefects) =>
+        prevDefects.map((defect) =>
+          defect.defect_id === data.defect_id ? { ...defect, ...data } : defect
+        )
+      );
+    }
+  
+    setTimeout(() => {
+      window.scrollTo(0, currentScrollPosition);
+    }, 0);
+  };  
 
   const progressMapping = {
     'Not Started': 'รอดำเนินการ',
@@ -280,7 +297,10 @@ function Dashboard() {
                       variant="outlined"
                       size="small"
                     />
-                    <IconButton color="primary" onClick={() => handleOpenDialogEdit(defect)}>
+                    <IconButton color="primary" onClick={() => {
+                      handleOpenDialogEdit(defect);
+                      handleAction('update', defect);
+                    }}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>
